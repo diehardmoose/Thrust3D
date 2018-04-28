@@ -5,10 +5,12 @@ using UnityEngine;
 public class GravitationalPullScript : MonoBehaviour {
     public float Strength;
     public float Range;
+    public float EnterAtmosRange;
+    public int planetID;
 
-    public Sprite inactiveSprite;
-    public Sprite activeSprite;
-    public bool inRange;
+    public bool inRange;  //public for debug
+    public bool inAtmosRange; //public for debug
+    public float inAtmosTime;
 
 
     // Use this for initialization
@@ -20,29 +22,44 @@ public class GravitationalPullScript : MonoBehaviour {
 
     void FixedUpdate()
     {
-        GameObject []energySpheres;
-        energySpheres = GameObject.FindGameObjectsWithTag("Player");
+        GameObject []PlayerObjects;
+        PlayerObjects = GameObject.FindGameObjectsWithTag("Player");
         inRange = false;
+        inAtmosRange = false;
 
-        foreach (GameObject energySphere in energySpheres)
+        foreach (GameObject PlayerObject in PlayerObjects)
         {
-            if (Vector3.Distance(transform.position, energySphere.GetComponent<Transform>().position) < Range){
+            //Check if player object is in range for gravitational pull
+            if (Vector3.Distance(transform.position, PlayerObject.GetComponent<Transform>().position) < Range){
                 inRange = true;
 
-                var vsub = transform.position - energySphere.GetComponent<Transform>().position;
-                energySphere.GetComponent<Rigidbody>().AddForce(vsub.normalized * (Mathf.Max((Strength - vsub.magnitude) / 5, 0)), ForceMode.Force);
+                var vsub = transform.position - PlayerObject.GetComponent<Transform>().position;
+                PlayerObject.GetComponent<Rigidbody>().AddForce(vsub.normalized * (Mathf.Max((Strength - vsub.magnitude) / 5, 0)), ForceMode.Force);
             }
+
+            //Check if player object is in range to enter atomosphere
+            if (Vector3.Distance(transform.position, PlayerObject.GetComponent<Transform>().position) < EnterAtmosRange)
+            {
+                inAtmosRange = true;
+
+            }
+
         }
 
-        //if (inRange)
-        //{
-        //    GetComponent<SpriteRenderer>().sprite = activeSprite;
-        //} else
-        //{
-        //    GetComponent<SpriteRenderer>().sprite = inactiveSprite;
-        //}
-           
-        
+        //time how long player is is enter atmosphere range
+
+        if (inAtmosRange)
+        {
+            inAtmosTime += Time.deltaTime;
+
+        }
+        else inAtmosTime = 0;
+
+
+
+
+
+
     }
 
 

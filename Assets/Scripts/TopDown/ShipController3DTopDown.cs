@@ -7,11 +7,7 @@ public class ShipController3DTopDown : MonoBehaviour {
 
     public float flt_RotationSpeed;
     public float flt_ThrustForce;
-    public float flt_MaxHeight;
-    //public Slider heightSlider;
-
-
-    //public float flt_debugHeight;
+    public float flt_Overallspeed;
 
     private Rigidbody tmpRigidbody;
     private ParticleSystem tmpParticleSystem;
@@ -24,10 +20,6 @@ public class ShipController3DTopDown : MonoBehaviour {
         tmpParticleSystem.Play();
         tmpParticleSystem.enableEmission = true;
 
-        //Initialise sliders
-        //heightSlider.maxValue = flt_MaxHeight;
-        //heightSlider.value = Mathf.Abs(tmpRigidbody.position.y);
-
 
     }
 	
@@ -36,9 +28,8 @@ public class ShipController3DTopDown : MonoBehaviour {
 
         //Rotate Left
         if (Input.GetKey(KeyCode.A))
-        {
             tmpRigidbody.transform.Rotate(Vector3.down * flt_RotationSpeed  *Time.deltaTime,Space.World);
-        }
+        
 
         //Rotate right
         if (Input.GetKey(KeyCode.D))
@@ -46,44 +37,21 @@ public class ShipController3DTopDown : MonoBehaviour {
             tmpRigidbody.transform.Rotate(Vector3.up * flt_RotationSpeed * Time.deltaTime, Space.World);
         }
 
-        //Rotate down
-        if (Input.GetKey(KeyCode.W))
-        {
-            //tmpRigidbody.transform.Rotate(Vector3.right * flt_RotationSpeed * Time.deltaTime);
-        }
-
-        //rotate up
-        if (Input.GetKey(KeyCode.S))
-        {
-            //tmpRigidbody.transform.Rotate(Vector3.left * flt_RotationSpeed * Time.deltaTime);
-        }
-
         //Thruster pressed
         if (Input.GetKey(KeyCode.Space))
         {
-
-            //flt_debugHeight = Mathf.Abs(tmpRigidbody.position.y);
-            //if (Mathf.Abs(tmpRigidbody.position.y) < Mathf.Abs(flt_MaxHeight))
-            //{
                 tmpRigidbody.AddRelativeForce(0, flt_ThrustForce * Time.deltaTime,0, ForceMode.Impulse);
                 tmpParticleSystem.enableEmission = true;
-            //}
-            //else tmpParticleSystem.enableEmission = false;
         }
         else
             tmpParticleSystem.enableEmission = false;
 
 
-        //Update heightSlider
-        //heightSlider.value = Mathf.Abs(tmpRigidbody.position.y);
+        flt_Overallspeed = tmpRigidbody.velocity.magnitude;
     }
 
     void FixedUpdate()
     {
-        //float h = Input.GetAxis("Horizontal") * flt_RotationSpeed * Time.deltaTime;
-        //float v = Input.GetAxis("Vertical") * flt_RotationSpeed * Time.deltaTime;
 
-        //tmpRigidbody.AddTorque(transform.up * h);
-        //tmpRigidbody.AddTorque(transform.right * v);
     }
 }
